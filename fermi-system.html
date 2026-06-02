@@ -241,6 +241,9 @@ footer{max-width:980px;margin:0 auto;padding:30px 20px 50px;color:var(--ink-dim)
   nav button{padding:7px 9px;font-size:.78rem}
   .panel{padding:20px 16px}
 }
+.day-sel-row{display:flex;align-items:center;gap:10px;margin:16px 0 20px}
+.sel-label{color:var(--txt-muted);font-size:.85rem;white-space:nowrap}
+.day-sel{flex:1;background:var(--card);border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:8px 12px;font-size:.9rem;cursor:pointer;appearance:auto}
 </style>
 </head>
 <body>
@@ -298,7 +301,11 @@ footer{max-width:980px;margin:0 auto;padding:30px 20px 50px;color:var(--ink-dim)
 <section class="view" id="v-daily">
   <p class="eyebrow">Today's training</p>
   <h2 class="sec" id="d-date">今日の問題</h2>
-  <p class="muted" id="d-note">目安10〜15分。急がず、考える筋道を意識して取り組みましょう。</p>
+  <p class="muted">目安10〜15分。急がず、考える筋道を意識して取り組みましょう。</p>
+  <div class="day-sel-row">
+    <label class="sel-label" for="day-select">問題を選ぶ</label>
+    <select id="day-select" class="day-sel"></select>
+  </div>
   <div id="d-host"></div>
 </section>
 
@@ -465,16 +472,41 @@ function renderHome(){
 /* =================== DAILY =================== */
 function todayKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function daysSinceEpoch(){return Math.floor(Date.now()/86400000)}
-function dailyProblem(){return POOL[daysSinceEpoch()%POOL.length]}
+
+function renderDailyForDay(idx){
+  const p=POOL[idx];
+  const todayIdx=daysSinceEpoch()%POOL.length;
+  const isToday=idx===todayIdx;
+  const already=isToday&&DB.doneDates.includes(todayKey());
+  const note=already?'（本日は記録済み。復習として再挑戦できます）'
+            :!isToday?'（別の日の問題です。採点は今日の記録には反映されません）'
+            :'';
+  const d=new Date();
+  document.getElementById('d-date').textContent=
+    isToday?`${d.getMonth()+1}月${d.getDate()}日 の問題`:`${idx+1}日目の問題`;
+  const host=document.getElementById('d-host');
+  host.innerHTML=problemCard(p,note,'daily');
+  bindProblem(p,'daily');
+}
 
 function renderDaily(){
-  const p=dailyProblem();
-  const d=new Date();
-  document.getElementById('d-date').textContent=`${d.getMonth()+1}月${d.getDate()}日 の問題`;
-  const already=DB.doneDates.includes(todayKey());
-  const host=document.getElementById('d-host');
-  host.innerHTML=problemCard(p, already?'（本日は記録済み。復習として再挑戦できます）':'', 'daily');
-  bindProblem(p,'daily');
+  try{
+    const todayIdx=daysSinceEpoch()%POOL.length;
+    const sel=document.getElementById('day-select');
+    if(!sel.dataset.built){
+      sel.innerHTML=POOL.map((p,i)=>
+        `<option value="${i}">${i+1}日目 — ${CATS[p.cat].name} : ${p.title}</option>`
+      ).join('');
+      sel.addEventListener('change',e=>renderDailyForDay(parseInt(e.target.value)));
+      sel.dataset.built='1';
+    }
+    sel.value=String(todayIdx);
+    renderDailyForDay(todayIdx);
+  }catch(e){
+    document.getElementById('d-host').innerHTML=
+      '<p class="muted">問題の読み込みに失敗しました。ページを再読み込みしてください（Ctrl+Shift+R）。</p>';
+    console.error('renderDaily error:',e);
+  }
 }
 
 /* build a problem card */
