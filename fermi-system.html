@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>思考力トレーニング ｜ 考える技術を毎日少しずつ</title>
+<meta name="description" content="フェルミ推定・論理・推理・水平思考・クリティカル思考を毎日1問。考える技術を少しずつ鍛えるトレーニングサイト。完全ローカル保存。" />
+<meta name="theme-color" content="#0f3d2e" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="思考力トレーニング" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c1813;
+  --bg2:#0f1f17;
+  --panel:#13261d;
+  --panel2:#173024;
+  --line:#234436;
+  --ink:#e9efe7;
+  --ink-soft:#b6c7ba;
+  --ink-dim:#8aa394;
+  --green:#1f7a52;
+  --green-bright:#36c08a;
+  --gold:#cBa253;
+  --gold-soft:#e3c987;
+  --danger:#d98a6a;
+  --radius:18px;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --sans:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.85;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+/* ===== ambient background ===== */
+.bg-fx{position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(1200px 800px at 15% -10%, #16402d 0%, transparent 55%),
+  radial-gradient(1000px 700px at 110% 20%, #103726 0%, transparent 50%),
+  linear-gradient(180deg,#0c1813,#0a140f 60%,#0b1610);}
+.bg-fx::after{content:"";position:absolute;inset:0;opacity:.5;
+  background:radial-gradient(700px 500px at 50% 120%, #1d5c40 0%, transparent 60%);
+  animation:drift 18s ease-in-out infinite alternate;}
+@keyframes drift{from{transform:translate(-4%, 2%) scale(1)}to{transform:translate(5%,-3%) scale(1.08)}}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.leaf{position:fixed;top:-40px;z-index:-1;color:#2f6b4d;opacity:.18;pointer-events:none;animation:fall linear infinite;}
+@keyframes fall{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(115vh) rotate(320deg)}}
+
+/* ===== header ===== */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:linear-gradient(180deg,rgba(12,24,19,.92),rgba(12,24,19,.6));
+  border-bottom:1px solid var(--line);}
+.bar{max-width:980px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none;color:var(--ink)}
+.logo .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#1f7a52,#0f3d2e);border:1px solid #2c6e4f;
+  box-shadow:0 4px 14px rgba(31,122,82,.4);font-family:var(--serif);color:var(--gold-soft);font-weight:700}
+.logo b{font-family:var(--serif);font-weight:600;letter-spacing:.04em;font-size:1.05rem}
+.logo span{font-size:.68rem;color:var(--ink-dim);letter-spacing:.22em;display:block;margin-top:-3px}
+nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+nav button{font-family:var(--sans);font-size:.83rem;color:var(--ink-soft);background:none;border:none;
+  padding:8px 12px;border-radius:10px;cursor:pointer;transition:.25s;white-space:nowrap}
+nav button:hover{color:var(--ink);background:rgba(54,192,138,.1)}
+nav button.active{color:var(--gold-soft);background:rgba(203,162,83,.12)}
+
+main{max-width:980px;margin:0 auto;padding:40px 20px 120px}
+.view{display:none;animation:viewin .55s cubic-bezier(.2,.7,.2,1) both}
+.view.show{display:block}
+@keyframes viewin{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* ===== typography ===== */
+h1.title{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,5.4vw,3.1rem);
+  line-height:1.4;letter-spacing:.02em}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
+.lead{color:var(--ink-soft);font-size:1.02rem;max-width:46ch;margin-top:20px}
+h2.sec{font-family:var(--serif);font-weight:600;font-size:1.5rem;margin:8px 0 6px;letter-spacing:.03em}
+h3{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:26px 0 8px;color:var(--gold-soft);letter-spacing:.02em}
+p{color:var(--ink-soft)}
+.muted{color:var(--ink-dim);font-size:.85rem}
+
+/* ===== hero ===== */
+.hero{padding:30px 0 10px}
+.hero .reveal{opacity:0;transform:translateY(22px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+.hero .reveal:nth-child(1){animation-delay:.05s}
+.hero .reveal:nth-child(2){animation-delay:.18s}
+.hero .reveal:nth-child(3){animation-delay:.32s}
+.hero .reveal:nth-child(4){animation-delay:.46s}
+@keyframes rise{to{opacity:1;transform:none}}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:30px;
+  font-family:var(--sans);font-weight:700;font-size:1rem;color:#08160f;
+  background:linear-gradient(135deg,var(--gold-soft),var(--gold));
+  padding:14px 26px;border-radius:999px;border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 10px 30px rgba(203,162,83,.28);transition:.3s}
+.cta:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(203,162,83,.4)}
+.cta .arr{transition:.3s}.cta:hover .arr{transform:translateX(5px)}
+
+.stripe{display:flex;gap:14px;flex-wrap:wrap;margin-top:42px}
+.stat{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px}
+.stat .n{font-family:var(--serif);font-size:1.9rem;color:var(--gold-soft);line-height:1}
+.stat .l{font-size:.74rem;color:var(--ink-dim);margin-top:8px;letter-spacing:.08em}
+
+/* ===== cards ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:30px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px 20px;cursor:pointer;overflow:hidden;transition:.3s;opacity:0;transform:translateY(16px);
+  animation:rise .7s forwards}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(54,192,138,.12),transparent 60%);
+  opacity:0;transition:.35s}
+.card:hover{transform:translateY(-6px);border-color:#3a7a5c;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.card:hover::before{opacity:1}
+.card .ico{font-size:1.7rem;display:block;margin-bottom:12px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+.card h4{font-family:var(--serif);font-weight:600;font-size:1.05rem;letter-spacing:.02em}
+.card p{font-size:.8rem;color:var(--ink-dim);margin-top:5px}
+.card .go{position:absolute;right:16px;bottom:14px;color:var(--green-bright);opacity:.5;transition:.3s}
+.card:hover .go{opacity:1;transform:translateX(4px)}
+
+/* ===== panel / problem ===== */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin-top:22px}
+.tagrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.tag{font-size:.7rem;letter-spacing:.08em;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);background:rgba(255,255,255,.02)}
+.tag.cat{color:var(--gold-soft);border-color:rgba(203,162,83,.4);background:rgba(203,162,83,.08)}
+.tag.lvl{color:var(--green-bright);border-color:rgba(54,192,138,.4)}
+.qbody{font-size:1.06rem;color:var(--ink);line-height:1.95;white-space:pre-wrap}
+.qbody b{color:var(--gold-soft)}
+
+label.fld{display:block;font-size:.8rem;color:var(--ink-dim);margin:18px 0 7px;letter-spacing:.06em}
+input.num,input.txt,textarea{width:100%;font-family:var(--sans);font-size:1rem;color:var(--ink);
+  background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px 15px;transition:.25s}
+textarea{min-height:120px;resize:vertical;line-height:1.8}
+input:focus,textarea:focus{outline:none;border-color:var(--green-bright);box-shadow:0 0 0 3px rgba(54,192,138,.15)}
+.inline-unit{display:flex;align-items:center;gap:10px}
+.inline-unit .u{color:var(--ink-soft);font-size:.95rem;white-space:nowrap}
+
+.choices{display:grid;gap:10px;margin-top:8px}
+.choice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px solid var(--line);border-radius:12px;
+  background:var(--bg2);cursor:pointer;transition:.2s;color:var(--ink-soft)}
+.choice:hover{border-color:#3a7a5c;color:var(--ink)}
+.choice.sel{border-color:var(--green-bright);background:rgba(54,192,138,.1);color:var(--ink)}
+.choice .k{font-family:var(--serif);color:var(--gold-soft);font-weight:600;min-width:1.2em}
+.choice.correct{border-color:var(--green-bright);background:rgba(54,192,138,.16)}
+.choice.wrong{border-color:var(--danger);background:rgba(217,138,106,.12)}
+
+.btn{font-family:var(--sans);font-weight:700;font-size:.95rem;color:#08160f;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--green-bright),var(--green));padding:13px 24px;border-radius:999px;
+  transition:.28s;box-shadow:0 8px 22px rgba(31,122,82,.3)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,122,82,.45)}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{color:var(--ink);border-color:#3a7a5c}
+.btn.gold{background:linear-gradient(135deg,var(--gold-soft),var(--gold))}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+
+/* result */
+.result{margin-top:22px;border-radius:var(--radius);padding:20px 22px;border:1px solid var(--line);
+  animation:pop .45s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.result.ok{border-color:var(--green-bright);background:rgba(54,192,138,.1)}
+.result.near{border-color:var(--gold);background:rgba(203,162,83,.1)}
+.result.ng{border-color:var(--danger);background:rgba(217,138,106,.1)}
+.result .verdict{font-family:var(--serif);font-size:1.3rem;display:flex;align-items:center;gap:10px}
+.result.ok .verdict{color:var(--green-bright)}
+.result.near .verdict{color:var(--gold-soft)}
+.result.ng .verdict{color:var(--danger)}
+.model{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+.model h5{font-family:var(--serif);color:var(--gold-soft);font-size:.95rem;margin-bottom:6px;letter-spacing:.04em}
+.model p{color:var(--ink-soft);font-size:.95rem;margin-bottom:10px}
+.selfscore{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.selfscore button{flex:1;min-width:90px;padding:11px;border-radius:12px;border:1px solid var(--line);
+  background:var(--bg2);color:var(--ink-soft);cursor:pointer;font-family:var(--sans);transition:.2s}
+.selfscore button:hover{color:var(--ink);transform:translateY(-2px)}
+.selfscore button.s-ok:hover{border-color:var(--green-bright)}
+.selfscore button.s-near:hover{border-color:var(--gold)}
+.selfscore button.s-ng:hover{border-color:var(--danger)}
+
+/* progress bar */
+.xpwrap{margin-top:8px}
+.xpbar{height:10px;background:var(--bg2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.xpfill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-bright));border-radius:999px;
+  transition:width 1.2s cubic-bezier(.2,.7,.2,1)}
+.rank{display:flex;align-items:center;gap:14px;margin-top:18px}
+.rank .badge{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;flex-shrink:0;
+  background:linear-gradient(135deg,#1f7a52,#0f3d2e);border:1px solid #2c6e4f;
+  font-family:var(--serif);font-size:1.6rem;color:var(--gold-soft);box-shadow:0 8px 20px rgba(0,0,0,.35)}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.cal .d{aspect-ratio:1;border-radius:9px;display:grid;place-items:center;font-size:.72rem;
+  background:var(--bg2);color:var(--ink-dim);border:1px solid transparent}
+.cal .d.head{background:none;color:var(--ink-dim);font-size:.66rem;letter-spacing:.05em}
+.cal .d.done{background:linear-gradient(135deg,var(--green),var(--green-bright));color:#08160f;font-weight:700;border-color:#3a7a5c}
+.cal .d.today{outline:2px solid var(--gold-soft);outline-offset:1px}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.calhead button{background:none;border:1px solid var(--line);color:var(--ink-soft);border-radius:8px;width:30px;height:30px;cursor:pointer}
+
+/* graph + radar */
+svg.chart{width:100%;height:auto;display:block;margin-top:10px}
+.legend{font-size:.72rem;color:var(--ink-dim);margin-top:6px}
+
+/* learn article */
+.article{max-width:64ch}
+.article p{margin:14px 0;color:var(--ink-soft)}
+.article .pull{font-family:var(--serif);color:var(--ink);font-size:1.2rem;border-left:3px solid var(--gold);padding-left:18px;margin:26px 0}
+.applist{list-style:none;margin-top:10px}
+.applist li{padding:12px 0;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+.applist li b{color:var(--gold-soft);font-family:var(--serif)}
+
+footer{max-width:980px;margin:0 auto;padding:30px 20px 50px;color:var(--ink-dim);font-size:.78rem;border-top:1px solid var(--line)}
+
+.pill-note{display:inline-flex;align-items:center;gap:7px;font-size:.74rem;color:var(--ink-dim);
+  border:1px solid var(--line);padding:6px 13px;border-radius:999px;margin-top:24px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green-bright);box-shadow:0 0 10px var(--green-bright)}
+
+.testprog{font-size:.8rem;color:var(--ink-dim);letter-spacing:.1em;margin-bottom:6px}
+.hidden{display:none!important}
+
+/* install toast */
+#install{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120%);
+  background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;
+  z-index:80;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:.4s;max-width:90vw}
+#install.show{transform:translateX(-50%) translateY(0)}
+#install span{font-size:.85rem;color:var(--ink-soft)}
+#install .btn{padding:9px 16px;font-size:.85rem}
+
+@media(max-width:560px){
+  main{padding:26px 16px 110px}
+  .bar{padding:12px 14px}
+  .logo span{display:none}
+  nav{gap:2px}
+  nav button{padding:7px 9px;font-size:.78rem}
+  .panel{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div><div class="grain"></div>
+<header>
+  <div class="bar">
+    <a class="logo" onclick="go('home')">
+      <span class="mark">思</span>
+      <span><b>思考力トレーニング</b><span>THINK&nbsp;DAILY</span></span>
+    </a>
+    <nav id="nav">
+      <button data-v="home" class="active" onclick="go('home')">ホーム</button>
+      <button data-v="daily" onclick="go('daily')">今日の問題</button>
+      <button data-v="test" onclick="go('test')">能力テスト</button>
+      <button data-v="records" onclick="go('records')">記録</button>
+      <button data-v="learn" onclick="go('learn')">解説</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section class="view show" id="v-home">
+  <div class="hero">
+    <p class="eyebrow reveal">Think, every single day</p>
+    <h1 class="title reveal">「考える技術」を、<br>毎日ひと問ずつ鍛える。</h1>
+    <p class=”lead reveal”>AIに考えさせるほど、自分で考える回路は鈍る。これは脅しではなく、脳の仕組みの話です。フェルミ推定・論理・推理・水平思考・クリティカル思考——8分野から日替わりで1問、10〜15分じっくり向き合う。解いて終わりにせず、<b style=”color:var(--gold-soft)”>考え方の手順</b>を振り返ることで、再現できる思考力が育ちます。</p>
+    <div class="reveal">
+      <button class="cta" onclick="go('daily')">今日の問題を解く <span class="arr">→</span></button>
+    </div>
+  </div>
+
+  <div class="stripe">
+    <div class="stat"><div class="n" id="h-streak">0</div><div class="l">連続日数 / STREAK</div></div>
+    <div class="stat"><div class="n" id="h-solved">0</div><div class="l">解いた問題 / SOLVED</div></div>
+    <div class="stat"><div class="n" id="h-rank">—</div><div class="l">現在の称号 / RANK</div></div>
+  </div>
+
+  <h2 class="sec" style="margin-top:48px">トレーニングメニュー</h2>
+  <p class="muted">カードを開くと、その内容に進めます。</p>
+  <div class="grid" id="menu">
+    <div class="card" style="animation-delay:.05s" onclick="go('daily')"><span class="ico">🗓️</span><h4>今日の問題</h4><p>日替わりミックス1問</p><span class="go">→</span></div>
+    <div class="card" style="animation-delay:.12s" onclick="go('test')"><span class="ico">🧭</span><h4>能力テスト</h4><p>総合＋分野別の診断</p><span class="go">→</span></div>
+    <div class="card" style="animation-delay:.19s" onclick="go('records')"><span class="ico">📊</span><h4>記録</h4><p>称号・推移・カレンダー</p><span class="go">→</span></div>
+    <div class="card" style="animation-delay:.26s" onclick="go('learn')"><span class="ico">📖</span><h4>解説</h4><p>なぜ鍛えられるのか</p><span class="go">→</span></div>
+  </div>
+
+  <h2 class="sec" style="margin-top:46px">鍛える8つの思考</h2>
+  <div class="grid" id="cats"></div>
+
+  <div class="pill-note"><span class="dot"></span>完全ローカル保存（この端末内）。データは外部に送信されません。</div>
+</section>
+
+<!-- ============ DAILY ============ -->
+<section class="view" id="v-daily">
+  <p class="eyebrow">Today's training</p>
+  <h2 class="sec" id="d-date">今日の問題</h2>
+  <p class="muted" id="d-note">目安10〜15分。急がず、考える筋道を意識して取り組みましょう。</p>
+  <div id="d-host"></div>
+</section>
+
+<!-- ============ TEST ============ -->
+<section class="view" id="v-test">
+  <p class="eyebrow">Assessment</p>
+  <h2 class="sec">能力チェックテスト</h2>
+  <p class="lead" style="margin-top:10px">全8分野から1問ずつ・計8問に挑戦します。総合スコアから<b style="color:var(--gold-soft)">レベルと称号</b>を判定し、分野別の強み・弱みをレーダーで可視化します。所要およそ20〜30分。</p>
+  <div id="t-host">
+    <div class="panel">
+      <h3 style="margin-top:0">測定の流れ</h3>
+      <p>① 8分野ミックスを順番に解答 → ② 数値・選択は自動採点／記述は模範解答を見て自己採点 → ③ 総合レベル・称号と分野別レーダーを表示。</p>
+      <div class="btnrow"><button class="btn gold" onclick="startTest()">テストを始める</button><button class="btn ghost" onclick="go('home')">戻る</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RECORDS ============ -->
+<section class="view" id="v-records">
+  <p class="eyebrow">Your growth</p>
+  <h2 class="sec">記録</h2>
+
+  <div class="panel">
+    <h3 style="margin-top:0">称号とレベル</h3>
+    <div class="rank"><div class="badge" id="r-badge">見</div>
+      <div style="flex:1">
+        <div style="font-family:var(--serif);font-size:1.25rem;color:var(--gold-soft)" id="r-rank">思索の入口</div>
+        <div class="muted" id="r-xp">経験値 0</div>
+        <div class="xpwrap"><div class="xpbar"><div class="xpfill" id="r-fill"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">スコア推移</h3>
+    <div id="r-graph"></div>
+    <div class="legend">直近の取り組みスコア（100=正解 / 60=おしい / 20=取り組み）</div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">分野別の力</h3>
+    <div id="r-radar"></div>
+    <div class="legend">各分野の平均スコア（解いた分野ほど外側に伸びます）</div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">取り組みカレンダー</h3>
+    <div class="calhead"><button onclick="calMove(-1)">‹</button><span id="cal-label" style="font-family:var(--serif)"></span><button onclick="calMove(1)">›</button></div>
+    <div class="cal" id="cal"></div>
+  </div>
+
+  <div class="btnrow">
+    <button class="btn ghost" onclick="exportCSV()">CSV出力</button>
+    <button class="btn ghost" onclick="resetData()">記録をリセット</button>
+  </div>
+</section>
+
+<!-- ============ LEARN ============ -->
+<section class=”view” id=”v-learn”>
+  <p class=”eyebrow”>Why & How</p>
+  <h2 class=”sec”>考える力を鍛えるということ</h2>
+  <div class=”article”>
+
+    <h3>意義——なぜ今、思考力を鍛えるのか</h3>
+    <p class=”pull”>AIに考えさせるほど、考える力は落ちていく。これは脅しではなく、脳の仕組みから来る話だ。</p>
+    <p>スマートフォンが普及したとき、私たちは道を覚えることをやめた。地図アプリが常に最適ルートを示してくれるから。その結果、空間把握を担う脳の特定部位が萎縮傾向を示すという研究がある。同じことが、思考の外注でも静かに進む。「調べれば出る」「AIに聞けばいい」——そう感じるたびに、自分で問いを立て、分解し、仮説を試す回路は少しずつ使われなくなる。</p>
+    <p>ここで逆説が生まれる。AIを使いこなすほど、人間に必要なのは「前例のない問いを立てる力」「情報の妥当性を見抜く力」「複数の解釈を保留しながら判断する力」になる。つまり、AIが得意な処理（検索・要約・整理）を外注すればするほど、AIが苦手なこと（前提を疑う・枠を外す・構造を見抜く）が人間の本質的な仕事になる。</p>
+    <p>思考力は才能ではない。ピアノと同じで、使い続けた分だけ精度が上がり、放置すれば鈍る<b style=”color:var(--gold-soft)”>技術</b>だ。毎日ひと問、自分の頭だけで考え抜く時間は、その回路への小さな負荷であり、栄養だ。</p>
+
+    <h3>磨かれる才能——8つの思考筋肉</h3>
+    <p>この8分野はランダムに選んだわけではない。「考える」という動作を構成する主要な工程を、それぞれが担当するよう設計されている。</p>
+    <ul class=”applist”>
+      <li><b>フェルミ推定</b> ― 大きな問いを小さく分け、わかる数字から全体を積み上げる「分解と概算」の筋肉。仕事で規模感を瞬時に出せるようになる。</li>
+      <li><b>論理パズル・三段論法</b> ― 条件を整理し、飛躍なく結論へ進む「論理の純度」を鍛える。提案や契約書の中の、こっそりした飛躍を見抜けるようになる。</li>
+      <li><b>推理</b> ― 断片的な情報から最も筋の通る説明を選ぶ力。限られた報告から全体像を組み立てる習慣が育つ。</li>
+      <li><b>水平思考</b> ― 当然の枠を外し、誰も思いつかなかった別解にたどり着く力。行き詰まりを打開するときに効く。</li>
+      <li><b>確率・期待値</b> ― 直感が裏切られる場面で、感情ではなく数で判断する力。保険・投資・意思決定の「割に合うか」が正確になる。</li>
+      <li><b>規則性・数列</b> ― 表面の数字の奥にある構造を見抜く力。変化のパターンを早く読み、隠れた規則を抽出する。</li>
+      <li><b>クリティカル思考</b> ― 「その前提は本当か」と立ち止まる力。相関と因果を混同しない、情報の鵜呑み回避。</li>
+    </ul>
+    <p>これらが噛み合うと、物事を<b style=”color:var(--gold-soft)”>多角的に・立体的に</b>見られるようになる。どれか一つが突出するより、8分野をまんべんなく鍛える方が、思考の全体像が底上げされる。能力テストのレーダーが、あなたの現在地を可視化してくれる。</p>
+
+    <h3>効果的なやり方——解いた後が本体</h3>
+    <p>多くの人は「解く」ことで終わりにしてしまう。それはフォームを確認せずに素振りするようなものだ。</p>
+    <p>力がつくのは、答え合わせではなく<b>「自分の筋道」と「模範の筋道」の差分を見ること</b>だ。「自分はここで決めつけた」「この分解を飛ばした」——その気づきが、次の一問での思考を変える。だから本サイトは採点後に必ず考え方の手順を示す。記述問題を自己採点にしているのも、自分の思考を自分で吟味する習慣そのものが訓練だからだ。</p>
+    <p>進め方のコツは三つ。<b>答えを見る前に、自分なりの筋道を最後まで立てきること。</b>詰まっても3〜5分は粘る——この粘りが回路を鍛える。そして採点後、模範解答と自分の差分に10秒でも向き合う。この10秒の積み重ねが、思考の「型」を体に染み込ませる。</p>
+
+    <h3>継続のコツ——「完璧にできなくていい」</h3>
+    <p class=”pull”>毎日解けなくてもいい。ただ、解いた日は必ず振り返る。その小さな約束だけを守る。</p>
+    <p>習慣が途切れる最大の理由は「完璧主義」だ。「今日は調子が悪いから明日まとめてやる」——この思考が習慣を壊す。思考力の訓練は、短くてもゼロより必ずましだ。一問解いて解説を読むだけでいい日もある。その積み重ねが、半年後の思考の質を決める。</p>
+    <p>ストリーク（連続日数）とカレンダーは、そのための仕組みだ。数字が積み重なると、途切れることへの心理的コストが上がる。称号とレベルは、進歩が見えにくい思考力に「見える成長」を与える装置だ。週に一度「能力テスト」を受ければ、自分の得意・苦手がレーダーに現れ、何を重点的に鍛えるかが見えてくる。</p>
+    <p>半年後、一年後——記録に残った過去の自分と比べたとき、考え方の変化に気づく瞬間がある。それがこのサイトが目指す、もっとも静かで確かな成果だ。</p>
+    <div class=”btnrow”><button class=”btn” onclick=”go('daily')”>今日の問題へ →</button></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  思考力トレーニング — 考える技術を毎日少しずつ。<br>
+  完全ローカル保存（端末内）／オフライン動作対応（PWA）。データは外部に送信されません。
+</footer>
+
+<div id="install"><span>ホーム画面に追加してアプリのように使えます。</span><button class="btn" onclick="doInstall()">追加</button><button class="btn ghost" onclick="hideInstall()">後で</button></div>
+
+<script src="questions.js"></script>
+<script>
+/* =================== CATEGORIES =================== */
+const CATS = {
+  fermi:     {name:"フェルミ推定", ico:"🔢", desc:"分解して概算する"},
+  logic:     {name:"論理パズル", ico:"🧩", desc:"条件から確定させる"},
+  deduction: {name:"推理", ico:"🔍", desc:"手がかりから筋を通す"},
+  lateral:   {name:"水平思考", ico:"💡", desc:"枠を外して別解へ"},
+  syllogism: {name:"三段論法", ico:"⚖️", desc:"妥当性を見抜く"},
+  probability:{name:"確率・期待値", ico:"🎲", desc:"直感を数で正す"},
+  sequence:  {name:"規則性・数列", ico:"🌀", desc:"構造を見抜く"},
+  critical:  {name:"クリティカル思考", ico:"🪞", desc:"前提を疑う"}
+};
+
+
+/* =================== STATE / STORAGE =================== */
+const KEY="think-train-v1";
+let DB = load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){return fresh()}}
+function fresh(){return {history:[],streak:0,lastDate:null,xp:0,byCat:{},testLog:[],doneDates:[]}}
+function save(){localStorage.setItem(KEY,JSON.stringify(DB))}
+
+const RANKS=[
+ {min:0,    n:"思索の入口", b:"見"},
+ {min:300,  n:"観察者",     b:"観"},
+ {min:800,  n:"推論者",     b:"推"},
+ {min:1600, n:"論客",       b:"論"},
+ {min:2800, n:"洞察者",     b:"洞"},
+ {min:4400, n:"戦略家",     b:"戦"},
+ {min:6500, n:"賢者",       b:"賢"},
+ {min:9000, n:"智の探究者", b:"智"}
+];
+function rankOf(xp){let r=RANKS[0];for(const x of RANKS){if(xp>=x.min)r=x}return r}
+function nextRank(xp){for(const x of RANKS){if(x.min>xp)return x}return null}
+
+/* =================== ROUTER =================== */
+function go(v){
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('show'));
+  document.getElementById('v-'+v).classList.add('show');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(v==='daily')renderDaily();
+  if(v==='records')renderRecords();
+  if(v==='home')renderHome();
+}
+
+/* =================== HOME =================== */
+function renderHome(){
+  document.getElementById('h-streak').textContent=DB.streak;
+  document.getElementById('h-solved').textContent=DB.history.length;
+  document.getElementById('h-rank').textContent=rankOf(DB.xp).n;
+  const c=document.getElementById('cats');
+  if(!c.dataset.done){
+    c.innerHTML=Object.entries(CATS).map(([k,v],i)=>
+      `<div class="card" style="animation-delay:${0.05+i*0.05}s"><span class="ico">${v.ico}</span><h4>${v.name}</h4><p>${v.desc}</p></div>`).join('');
+    c.dataset.done="1";
+  }
+}
+
+/* =================== DAILY =================== */
+function todayKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function daysSinceEpoch(){return Math.floor(Date.now()/86400000)}
+function dailyProblem(){return POOL[daysSinceEpoch()%POOL.length]}
+
+function renderDaily(){
+  const p=dailyProblem();
+  const d=new Date();
+  document.getElementById('d-date').textContent=`${d.getMonth()+1}月${d.getDate()}日 の問題`;
+  const already=DB.doneDates.includes(todayKey());
+  const host=document.getElementById('d-host');
+  host.innerHTML=problemCard(p, already?'（本日は記録済み。復習として再挑戦できます）':'', 'daily');
+  bindProblem(p,'daily');
+}
+
+/* build a problem card */
+function problemCard(p,note,mode){
+  const cat=CATS[p.cat];
+  let answerUI='';
+  if(p.type==='numeric'){
+    answerUI=`<label class="fld">あなたの答え</label>
+      <div class="inline-unit"><input class="num" id="ans-${mode}" inputmode="decimal" placeholder="数値を入力"><span class="u">${p.unit||''}</span></div>`;
+  }else if(p.type==='choice'){
+    answerUI=`<label class="fld">選択してください</label><div class="choices" id="ch-${mode}">`+
+      p.choices.map((c,i)=>`<div class="choice" data-i="${i}" onclick="pick('${mode}',${i})"><span class="k">${'ABCD'[i]}</span><span>${c}</span></div>`).join('')+`</div>`;
+  }else{
+    answerUI=`<label class="fld">あなたの考え・答え（自由記述）</label><textarea id="ans-${mode}" placeholder="考えた筋道を書き出してみましょう（書くことで思考が整理されます）"></textarea>`;
+  }
+  return `<div class="panel">
+    <div class="tagrow"><span class="tag cat">${cat.ico} ${cat.name}</span><span class="tag lvl">難易度：${p.lvl}</span><span class="tag">目安10〜15分</span></div>
+    <div class="qbody">${p.body}</div>
+    ${note?`<p class="muted" style="margin-top:12px">${note}</p>`:''}
+    ${answerUI}
+    <div class="btnrow"><button class="btn" id="grade-${mode}">採点する</button>${mode==='daily'?'<button class="btn ghost" onclick="go(\'home\')">ホームへ</button>':''}</div>
+    <div id="res-${mode}"></div>
+  </div>`;
+}
+let SEL={};
+function pick(mode,i){SEL[mode]=i;document.querySelectorAll(`#ch-${mode} .choice`).forEach(c=>c.classList.toggle('sel',+c.dataset.i===i))}
+
+function bindProblem(p,mode,onDone){
+  document.getElementById('grade-'+mode).onclick=()=>gradeProblem(p,mode,onDone);
+}
+
+function gradeProblem(p,mode,onDone){
+  const res=document.getElementById('res-'+mode);
+  let verdict,cls,score;
+  if(p.type==='numeric'){
+    const raw=document.getElementById('ans-'+mode).value.replace(/[, ]/g,'');
+    const v=parseFloat(raw);
+    if(isNaN(v)){res.innerHTML=`<p class="muted" style="margin-top:14px">数値を入力してください。</p>`;return;}
+    const lo=p.low,hi=p.high;
+    if(v>=lo&&v<=hi){verdict='正解！';cls='ok';score=100;}
+    else if(v>=lo/3&&v<=hi*3){verdict='おしい（桁は近い）';cls='near';score=60;}
+    else{verdict='もう少し';cls='ng';score=20;}
+    showResult(p,mode,res,verdict,cls,score,onDone,
+      `<p>あなたの答え：<b>${v.toLocaleString()}${p.unit||''}</b>／許容範囲の目安：${lo.toLocaleString()}〜${hi.toLocaleString()}${p.unit||''}</p>`);
+  }else if(p.type==='choice'){
+    if(SEL[mode]==null){res.innerHTML=`<p class="muted" style="margin-top:14px">選択肢を選んでください。</p>`;return;}
+    const ok=SEL[mode]===p.correct;
+    document.querySelectorAll(`#ch-${mode} .choice`).forEach(c=>{const i=+c.dataset.i;if(i===p.correct)c.classList.add('correct');else if(i===SEL[mode])c.classList.add('wrong');});
+    verdict=ok?'正解！':'不正解';cls=ok?'ok':'ng';score=ok?100:20;
+    showResult(p,mode,res,verdict,cls,score,onDone,'');
+  }else{
+    // free -> self score
+    res.innerHTML=`<div class="result near"><div class="verdict">📝 模範解答で振り返りましょう</div>
+      <div class="model"><h5>模範解答</h5><p>${nl(p.model)}</p><h5>考え方の手順・応用</h5><p>${nl(p.explain)}</p>
+      <p class="muted" style="margin-top:12px">自分の筋道と比べて、近さを選んでください：</p>
+      <div class="selfscore">
+        <button class="s-ok" onclick="selfScore('${p.id}','${mode}',100,this)">だいたい合っていた</button>
+        <button class="s-near" onclick="selfScore('${p.id}','${mode}',60,this)">部分的に合っていた</button>
+        <button class="s-ng" onclick="selfScore('${p.id}','${mode}',20,this)">考え方が違った</button>
+      </div></div></div>`;
+    res._onDone=onDone;res._p=p;
+  }
+}
+function selfScore(pid,mode,score,btn){
+  const p=POOL.find(x=>x.id===pid)|| (TEST.set&&TEST.set.find(x=>x.id===pid));
+  const res=document.getElementById('res-'+mode);
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.style.opacity=.4);btn.style.opacity=1;
+  const onDone=res._onDone;
+  if(mode==='daily') recordResult(p,score);
+  if(onDone)onDone(score);
+}
+
+function showResult(p,mode,res,verdict,cls,score,onDone,extra){
+  const icon=cls==='ok'?'✅':cls==='near'?'➗':'🔁';
+  res.innerHTML=`<div class="result ${cls}"><div class="verdict">${icon} ${verdict}</div>
+    ${extra}
+    <div class="model"><h5>模範解答</h5><p>${nl(p.model)}</p>${p.acceptNote?`<p class="muted">${p.acceptNote}</p>`:''}<h5>考え方の手順・応用</h5><p>${nl(p.explain)}</p></div></div>`;
+  if(mode==='daily') recordResult(p,score);
+  if(onDone)onDone(score);
+}
+function nl(s){return (s||'').replace(/\n/g,'<br>')}
+
+/* =================== RECORD A RESULT =================== */
+function recordResult(p,score){
+  const tk=todayKey();
+  DB.history.push({date:tk,cat:p.cat,score,t:Date.now()});
+  DB.xp += Math.round(score*0.6)+20; // attempt + performance
+  DB.byCat[p.cat]=DB.byCat[p.cat]||{n:0,sum:0};
+  DB.byCat[p.cat].n++;DB.byCat[p.cat].sum+=score;
+  // streak + calendar (only once per day for streak)
+  if(!DB.doneDates.includes(tk)){
+    DB.doneDates.push(tk);
+    const y=new Date();y.setDate(y.getDate()-1);
+    const yk=todayKey(y);
+    if(DB.lastDate===yk)DB.streak++;else if(DB.lastDate!==tk)DB.streak=1;
+    DB.lastDate=tk;
+  }
+  save();
+}
+
+/* =================== ABILITY TEST =================== */
+let TEST={set:[],idx:0,scores:[]};
+function startTest(){
+  // one random problem per category
+  const set=Object.keys(CATS).map(cat=>{
+    const arr=POOL.filter(p=>p.cat===cat);
+    return arr[Math.floor(Math.random()*arr.length)];
+  });
+  TEST={set,idx:0,scores:[]};
+  renderTestStep();
+}
+function renderTestStep(){
+  const host=document.getElementById('t-host');
+  if(TEST.idx>=TEST.set.length){return finishTest()}
+  const p=TEST.set[TEST.idx];
+  SEL['test']=null;
+  host.innerHTML=`<p class="testprog">問題 ${TEST.idx+1} / ${TEST.set.length}</p>`+problemCard(p,'','test');
+  // change button to "次へ"
+  const gb=document.getElementById('grade-test');gb.textContent='採点して次へ';
+  gb.onclick=()=>gradeProblem(p,'test',(score)=>{
+    TEST.scores.push({cat:p.cat,score});
+    const g=document.getElementById('grade-test');
+    g.textContent= TEST.idx+1>=TEST.set.length?'結果を見る':'次の問題へ →';
+    g.onclick=()=>{TEST.idx++;renderTestStep();};
+  });
+}
+function finishTest(){
+  const total=TEST.scores.reduce((a,b)=>a+b.score,0);
+  const avg=Math.round(total/TEST.scores.length);
+  const rank=rankOf(avg*10); // map avg(0-100) -> approx xp band
+  DB.testLog.push({date:todayKey(),avg,t:Date.now()});
+  // merge test into byCat lightly
+  TEST.scores.forEach(s=>{DB.byCat[s.cat]=DB.byCat[s.cat]||{n:0,sum:0};DB.byCat[s.cat].n++;DB.byCat[s.cat].sum+=s.score;});
+  DB.xp+=Math.round(avg*1.5);save();
+  const host=document.getElementById('t-host');
+  const radar=radarSVG(catScoresFromTest());
+  host.innerHTML=`<div class="panel">
+    <div class="tagrow"><span class="tag cat">測定完了</span></div>
+    <h2 class="sec" style="margin-top:4px">総合スコア ${avg} / 100</h2>
+    <div class="rank"><div class="badge">${rank.b}</div><div><div style="font-family:var(--serif);font-size:1.3rem;color:var(--gold-soft)">${rank.n}</div><div class="muted">${comment(avg)}</div></div></div>
+    <h3>分野別の強み・弱み</h3>${radar}
+    <div class="legend">外側ほど高スコア。へこんだ分野が次に伸ばす狙い目です。</div>
+    <div class="btnrow"><button class="btn gold" onclick="startTest()">もう一度</button><button class="btn ghost" onclick="go('records')">記録を見る</button></div>
+  </div>`;
+}
+function comment(a){if(a>=85)return'極めて高い水準。安定して筋道を立てられています。';if(a>=65)return'良好。粘り強く考えれば十分到達できる力があります。';if(a>=45)return'伸びしろ大。毎日の1問で着実に上がります。';return'まずは解説で“考え方の型”を吸収していきましょう。'}
+function catScoresFromTest(){const m={};TEST.scores.forEach(s=>m[s.cat]=s.score);return m;}
+
+/* =================== RECORDS =================== */
+function renderRecords(){
+  const rank=rankOf(DB.xp),nx=nextRank(DB.xp);
+  document.getElementById('r-badge').textContent=rank.b;
+  document.getElementById('r-rank').textContent=rank.n;
+  document.getElementById('r-xp').textContent='経験値 '+DB.xp+(nx?`／次の称号「${nx.n}」まで ${nx.min-DB.xp}`:'（最高位）');
+  const pct=nx?Math.min(100,Math.round((DB.xp-rank.min)/(nx.min-rank.min)*100)):100;
+  setTimeout(()=>document.getElementById('r-fill').style.width=pct+'%',60);
+  document.getElementById('r-graph').innerHTML=lineSVG(DB.history.slice(-14).map(h=>h.score));
+  const cs={};Object.keys(CATS).forEach(k=>{const c=DB.byCat[k];cs[k]=c?Math.round(c.sum/c.n):0;});
+  document.getElementById('r-radar').innerHTML=radarSVG(cs);
+  renderCal();
+  document.getElementById('h-streak') && (document.getElementById('h-streak').textContent=DB.streak);
+}
+
+/* line chart */
+function lineSVG(data){
+  if(!data.length)return '<p class="muted">まだ記録がありません。今日の問題を解くとここに表示されます。</p>';
+  const W=640,H=180,pad=24;const n=data.length;
+  const x=i=>pad+(W-2*pad)*(n===1?0.5:i/(n-1));
+  const y=v=>H-pad-(H-2*pad)*(v/100);
+  const pts=data.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  const area=`${pad},${H-pad} ${pts} ${x(n-1)},${H-pad}`;
+  const dots=data.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#cBa253"/>`).join('');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}">
+    <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36c08a" stop-opacity=".35"/><stop offset="1" stop-color="#36c08a" stop-opacity="0"/></linearGradient></defs>
+    ${[0,50,100].map(g=>`<line x1="${pad}" y1="${y(g)}" x2="${W-pad}" y2="${y(g)}" stroke="#234436" stroke-dasharray="3 5"/><text x="2" y="${y(g)+4}" fill="#8aa394" font-size="10">${g}</text>`).join('')}
+    <polygon points="${area}" fill="url(#lg)"/>
+    <polyline points="${pts}" fill="none" stroke="#36c08a" stroke-width="2.5" stroke-linejoin="round"/>${dots}</svg>`;
+}
+
+/* radar chart */
+function radarSVG(scores){
+  const keys=Object.keys(CATS);const N=keys.length;const cx=160,cy=160,R=120;
+  const ang=i=>(-Math.PI/2)+i*2*Math.PI/N;
+  const pt=(i,r)=>[cx+r*Math.cos(ang(i)),cy+r*Math.sin(ang(i))];
+  let grid='';[0.25,0.5,0.75,1].forEach(f=>{grid+=`<polygon points="${keys.map((_,i)=>pt(i,R*f).join(',')).join(' ')}" fill="none" stroke="#234436"/>`;});
+  let axes='',labels='';
+  keys.forEach((k,i)=>{const[ex,ey]=pt(i,R);axes+=`<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="#234436"/>`;
+    const[lx,ly]=pt(i,R+22);labels+=`<text x="${lx}" y="${ly}" fill="#b6c7ba" font-size="11" text-anchor="middle">${CATS[k].name.replace('・','')}</text>`;});
+  const poly=keys.map((k,i)=>pt(i,R*((scores[k]||0)/100)).join(',')).join(' ');
+  const dots=keys.map((k,i)=>{const[px,py]=pt(i,R*((scores[k]||0)/100));return `<circle cx="${px}" cy="${py}" r="3" fill="#cBa253"/>`}).join('');
+  return `<svg class="chart" viewBox="0 0 320 340">${grid}${axes}
+    <polygon points="${poly}" fill="rgba(54,192,138,.25)" stroke="#36c08a" stroke-width="2"/>${dots}${labels}</svg>`;
+}
+
+/* calendar */
+let calDate=new Date();
+function calMove(n){calDate.setMonth(calDate.getMonth()+n);renderCal();}
+function renderCal(){
+  const y=calDate.getFullYear(),m=calDate.getMonth();
+  document.getElementById('cal-label').textContent=`${y}年 ${m+1}月`;
+  const first=new Date(y,m,1).getDay();const days=new Date(y,m+1,0).getDate();
+  const cal=document.getElementById('cal');
+  let h=['日','月','火','水','木','金','土'].map(d=>`<div class="d head">${d}</div>`).join('');
+  for(let i=0;i<first;i++)h+=`<div class="d" style="background:none"></div>`;
+  const tk=todayKey();
+  for(let d=1;d<=days;d++){
+    const key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const done=DB.doneDates.includes(key);
+    h+=`<div class="d ${done?'done':''} ${key===tk?'today':''}">${d}</div>`;
+  }
+  cal.innerHTML=h;
+}
+
+/* CSV / reset */
+function exportCSV(){
+  const rows=[['date','category','score']].concat(DB.history.map(h=>[h.date,CATS[h.cat].name,h.score]));
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='thinking-training.csv';a.click();
+}
+function resetData(){if(confirm('すべての記録を消去します。よろしいですか？')){DB=fresh();save();renderRecords();renderHome();}}
+
+/* =================== PWA =================== */
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install').classList.add('show');});
+function doInstall(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}hideInstall();}
+function hideInstall(){document.getElementById('install').classList.remove('show');}
+
+/* falling leaves ambiance */
+(function(){const N=6;for(let i=0;i<N;i++){const s=document.createElement('div');s.className='leaf';
+  s.style.left=(Math.random()*100)+'vw';s.style.animationDuration=(14+Math.random()*12)+'s';s.style.animationDelay=(-Math.random()*20)+'s';
+  s.style.fontSize=(10+Math.random()*14)+'px';s.textContent='❧';document.body.appendChild(s);}})();
+
+/* init */
+renderHome();
+</script>
+</body>
+</html>
