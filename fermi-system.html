@@ -241,9 +241,16 @@ footer{max-width:980px;margin:0 auto;padding:30px 20px 50px;color:var(--ink-dim)
   nav button{padding:7px 9px;font-size:.78rem}
   .panel{padding:20px 16px}
 }
-.day-sel-row{display:flex;align-items:center;gap:10px;margin:16px 0 20px}
-.sel-label{color:var(--txt-muted);font-size:.85rem;white-space:nowrap}
-.day-sel{flex:1;background:var(--card);border:1px solid var(--border);color:var(--txt);border-radius:8px;padding:8px 12px;font-size:.9rem;cursor:pointer;appearance:auto}
+.day-sel-row{display:flex;align-items:center;gap:12px;margin:18px 0 22px;padding:14px 18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
+.sel-label{color:var(--ink-dim);font-size:.78rem;letter-spacing:.12em;white-space:nowrap;flex-shrink:0}
+.day-sel{flex:1;background:var(--bg2);border:1px solid var(--line);color:var(--ink);border-radius:12px;
+  padding:10px 38px 10px 14px;font-size:.88rem;font-family:var(--sans);cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%238aa394' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;transition:.22s;min-width:0}
+.day-sel:focus{outline:none;border-color:var(--green-bright);box-shadow:0 0 0 3px rgba(54,192,138,.15)}
+.day-sel:hover{border-color:#3a7a5c;color:var(--ink)}
+.day-sel option{background:#0f1f17;color:#e9efe7}
 </style>
 </head>
 <body>
